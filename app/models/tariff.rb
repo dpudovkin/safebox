@@ -8,5 +8,9 @@ class Tariff < ApplicationRecord
       tariff.save
     end
   end
+
+  def full_name
+    "Box type: #{box_type.full_name} Price per day: #{price_per_day} RUB"
+  end
   
 end

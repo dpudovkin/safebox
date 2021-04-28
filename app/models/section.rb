@@ -6,7 +6,7 @@ class Section < ApplicationRecord
   has_many :boxes
 
   def full_name
-    "#{label} #{floor}"
+    "#{label}#{floor}"
   end
 
 end

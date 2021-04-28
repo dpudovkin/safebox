@@ -13,22 +13,23 @@ class Contract < ApplicationRecord
   validates :terminations_of_contract_id, presence: false
 
   def full_name
-    "Date: #{start_date} Box:#{box.full_name} Client: #{client.full_name}"
+    # "Date: #{start_date} Box:#{box.full_name} Client: #{client.full_name}"
+    "Date: #{start_date} Rental_days:#{rental_days} Id: #{id}"
   end
 
   def self.generate
     Contract.delete_all
     TerminationsOfContract.delete_all
-    numbers = 30
+    numbers = 60000
     client_ids = Client.all.map(&:id)
     box_ids =  Box.all.map(&:id)
-    numbers.times do |_|
+    numbers.times do |index|
       client_id = client_ids.sample
       box_id = box_ids.sample
       chain_seed = Random.rand(1..1000)
       date_range = free_dates(box_id).map{|value| value}
       next if date_range.length < 9
-
+      puts "Number: #{index}"
 
       deposit =  date_range.length * 250
       contract = Contract.new(client_id: client_id, box_id: box_id, start_date: date_range.first,
@@ -68,21 +69,20 @@ class Contract < ApplicationRecord
   end
 
   def self.free_dates(box_id)
-    contracts = Contract.find_by(box_id: box_id)
-    return Date.new(2020, 1, 15)..Date.new(2020, 1, 30) if contracts.nil?
-
+    contracts = Contract.where(box_id: box_id)
+    return Date.new(2020, 1, 15)..Date.new(2020, 1, 30) if contracts.length.zero?
+    goal =  Random.rand(9..60)
     range = []
     contracts.each do |contract|
       range.append(contract.start_date..(contract.start_date + contract.rental_days.days))
     end
-    dates = (Date.new(2015, 1, 1)..Date.new(2025, 1, 1)).map{|value| value}
-    goal = Random.rand(12..60)
-    dates.lazy.select do |date|
+    dates = (Date.new(2015, 1, 1)..Date.new(2025, 1, 1)).to_a
+    res = dates.select do |date|
       range.all? do |range|
         !range.cover?(date)
       end
     end.inject([]) do |result, date|
-      break if result.length >= goal
+      return result if result.length >= goal
 
       if result.length.zero?
         result.append(date)
@@ -94,6 +94,7 @@ class Contract < ApplicationRecord
         end  
       end  
     end
+    return res
     #     buffer = []
     #     dates.each do |date|
     #       free = range.all? do |range|
@@ -139,6 +140,14 @@ class Contract < ApplicationRecord
     prev_cost = 0
     prev_cost = previous_contract.full_cost unless previous_contract.nil?
     prev_cost + rent * rental_days
+  end
+
+  def type_id
+    box.box_type.id
+  end
+
+  def list_days
+    (start_date..(start_date+rental_days.days)).to_a
   end
 
 

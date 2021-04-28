@@ -1,0 +1,30 @@
+<%#= form_with url: reports_customer_billing_path, local: true ,:method => "get", id: 'generate report' do |form|%>
+<!--  <br/>-->
+  <%#= submit_tag("Generate report") %>
+<%# end %>
+
+<table>
+  <tr>
+    <th>Line number</th>
+    <th>Client</th>
+    <th>Phone number</th>
+    <th>Passport</th>
+    <th>Account number</th>
+    <th>Bank name</th>
+<!--    <th>BIC</th>-->
+  </tr>
+  <%i=0 %>
+  <% @result.each do |value| %>
+    <%i+=1 %>
+    <tr>
+      <td><%= i %></td>
+      <td><%= link_to value["full_name"], admin_client_path(Client.find(value["id"])) %></td>
+      <td><%= value["phone"] %></td>
+      <td><%= link_to value["passport"], admin_passport_path(Passport.find(value["passport_id"])) %></td>
+      <td><%= value["account_number"] %></td>
+      <td><%= value["bank"] %></td>
+<!--      <td><%#= value[:bik] %></td>-->
+    </tr>
+  <%end %>
+</table>
+

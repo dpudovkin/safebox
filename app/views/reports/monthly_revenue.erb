@@ -1,0 +1,35 @@
+<%= form_with url: reports_monthly_revenue_path, local: true ,:method => "get", id: 'generate report from' do |form|%>
+  <%= label_tag('Start month:') %>
+  <%= form.date_field :start_date, placeholder: "Start date of reservation", value: @start_date %>
+  <br/>
+  <%= label_tag('End month:') %>
+  <%= form.date_field :end_date,placeholder: "End date of reservation", value: @end_date %>
+  <br/>
+  <%= submit_tag("Generate report") %>
+<% end %>
+
+<% unless @result.nil? || @result.length.zero? %>
+<table>
+<tr>
+  <th>Line number</th>
+  <th>Month</th>
+  <th>Number of contracts</th>
+  <th>Revenue, RUB</th>
+</tr>
+<%i=0 %>
+<% @result.map {|key, _| key}.sort do |key|
+  arr = key.split(".")
+  Date.new(arr[1].to_i,arr[0].to_i,1)
+    end.reverse.each do |date| %>
+  <%i+=1 %>
+  <tr>
+    <% arr = date.split(".") %>
+    <% str_date = Date.new(arr[1].to_i,arr[0].to_i,1).to_formatted_s(:long)  %>
+    <td><%= i %></td>
+    <td><%= str_date %></td>
+    <td><%= @result[date][:number] %></td>
+    <td><%= @result[date][:income] %></td>
+  </tr>
+<%end %>
+</table>
+<%end %>

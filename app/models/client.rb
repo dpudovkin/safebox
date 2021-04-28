@@ -31,4 +31,10 @@ class Client < ApplicationRecord
     # passport.full_name
     "Email:#{email} Passport id:#{passport_id}"
   end
+
+  def name
+    passport.full_name
+  end
+
+
 end

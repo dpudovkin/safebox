@@ -1,0 +1,33 @@
+<%= form_with url: reports_clients_path, local: true ,:method => "get", id: 'generate report' do |form|%>
+  <%= label_tag('On the date:') %>
+  <%= form.date_field :end_date, value: @end_date %>
+  <br/>
+  <%= submit_tag("Generate report") %>
+<% end %>
+
+<% unless @result.nil? or @result.length.zero? %>
+  <table>
+    <tr>
+      <th>Line number</th>
+      <th>Client name</th>
+      <th>Client email</th>
+      <th>Number of contracts</th>
+      <th>Total income</th>
+    </tr>
+    <%i=0 %>
+    <% @result.each do |value| %>
+      <%i+=1 %>
+    <tr>
+      <td><%= i %></td>
+      <% client = Client.find(value[:client_id]) %>
+      <td><%= link_to client.name, admin_client_path(client) %></td>
+      <td><%= client.email %></td>
+      <td><%= value[:number] %></td>
+      <td><%= value[:income] %></td>
+    </tr>
+      <%end %>
+  </table>
+
+<%end %>
+
+

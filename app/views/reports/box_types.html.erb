@@ -1,0 +1,31 @@
+<%= form_with url: reports_box_types_path, local: true ,:method => "get", id: 'generate report' do |form|%>
+  <%= label_tag('On the date:') %>
+  <%= form.date_field :end_date, value: @end_date %>
+  <br/>
+  <%= submit_tag("Generate report") %>
+<% end %>
+
+<% unless @result.nil? or @result.length.zero? %>
+  <table>
+    <tr>
+      <th>Line number</th>
+      <th>Box type</th>
+      <th>Number of contracts</th>
+      <th>Average contract value</th>
+      <th>Total income</th>
+    </tr>
+    <%i=0 %>
+    <% @result.each do |value| %>
+      <%i+=1 %>
+      <tr>
+        <td><%= i %></td>
+        <% box_type = BoxType.find(value[:type_id]) %>
+        <td><%= link_to box_type.full_name, admin_box_type_path(box_type) %></td>
+        <td><%= value[:number] %></td>
+        <td><%= (value[:income].to_f/value[:number].to_f).round(-1) %></td>
+        <td><%= value[:income].to_f.round(0) %></td>
+      </tr>
+    <%end %>
+  </table>
+
+<%end %>

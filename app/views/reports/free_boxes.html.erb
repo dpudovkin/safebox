@@ -1,0 +1,58 @@
+
+
+<%= form_with url: reports_free_boxes_path, local: true ,:method => "get", id: 'generate report from' do |form|%>
+  <%= label_tag('Box type:') %>
+  <%= form.select :type, BoxType.all.collect { |type| [type.full_name.to_s, type.id] }, selected: @type_id
+      %>
+  <br/>
+  <%= label_tag('Start date:') %>
+  <%= form.date_field :start_date, placeholder: "Start date of reservation", value: @start_date %>
+  <br/>
+  <%= label_tag('End date:') %>
+  <%= form.date_field :end_date,placeholder: "End date of reservation", value: @end_date %>
+  <br/>
+  <%= submit_tag("Generate report") %>
+<% end %>
+
+<% unless @result.nil? %>
+  <table>
+    <tr>
+      <th>Price per day</th>
+      <th>Rental days</th>
+      <th>Total</th>
+    </tr>
+    <tr>
+      <td><%= @price_per_day %></td>
+      <td><%= @rental_days %></td>
+      <td><%= @price_per_day*@rental_days %></td>
+    </tr>
+  </table>
+  <br/>
+<table>
+  <tr>
+    <th>Line number</th>
+  <th>Box number</th>
+    <th>Section name</th>
+    <th>Box type</th>
+  </tr>
+  <% i=0 %>
+  <% @result.each do |value| %>
+    <% i+=1 %>
+    <% box=Box.find(value)%>
+    <tr>
+      <td>
+        <%= i %>
+      </td>
+    <td>
+      <%= link_to box.number, admin_box_path(box) %>
+    </td>
+    <td>
+      <%= box.section.full_name %>
+    </td>
+      <td>
+        <%= box.box_type.full_name %>
+      </td>
+   </tr>
+  <% end %>
+</table>
+<% end %>

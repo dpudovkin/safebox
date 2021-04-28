@@ -13,9 +13,9 @@ class TerminationsOfContract < ApplicationRecord
     company_debt =0
     client_debt =0
     if balance.positive?
-      company_debt = balance
-    else
       client_debt = balance
+    else
+      company_debt = -balance
     end
     TerminationsOfContract.new(company_debt: company_debt, client_debt: client_debt, termination_date: date)
   end
