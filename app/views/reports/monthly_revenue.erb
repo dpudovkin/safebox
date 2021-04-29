@@ -1,3 +1,7 @@
+
+<div class="row" style="margin: 8px;">
+  <div class="col-2">
+    <div class="form-group">
 <%= form_with url: reports_monthly_revenue_path, local: true ,:method => "get", id: 'generate report from' do |form|%>
   <%= label_tag('Start month:') %>
   <%= form.date_field :start_date, placeholder: "Start date of reservation", value: @start_date %>
@@ -5,11 +9,13 @@
   <%= label_tag('End month:') %>
   <%= form.date_field :end_date,placeholder: "End date of reservation", value: @end_date %>
   <br/>
-  <%= submit_tag("Generate report") %>
+  <%= submit_tag("Generate report", class: "btn btn-primary", style: "margin: 8px;")%>
 <% end %>
-
+    </div>
+  </div>
 <% unless @result.nil? || @result.length.zero? %>
-<table>
+    <div class="col-10">
+<table class ="table-striped">
 <tr>
   <th>Line number</th>
   <th>Month</th>
@@ -33,3 +39,5 @@
 <%end %>
 </table>
 <%end %>
+</div>
+</div>

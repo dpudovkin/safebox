@@ -103,16 +103,18 @@ class ReportsController < ApplicationController
     if @start_date.to_s.length.zero? || @end_date.to_s.length.zero?
       return
     end
-    sql = "SELECT contracts.start_date as start_date, contracts.rental_days as days,
+    sql = "SELECT contracts.id as id, tariffs.start_date as tariff_start_date,
+    contracts.start_date as start_date, contracts.rental_days as days,
     tariffs.price_per_day as price FROM contracts
     LEFT JOIN boxes ON boxes.id = contracts.box_id
     LEFT JOIN box_types ON box_types.id = boxes.box_type_id
-    JOIN tariffs ON tariffs.box_type_id=box_types.id
+    LEFT JOIN tariffs ON tariffs.box_type_id=box_types.id
     WHERE (tariffs.start_date <= contracts.start_date) AND
      ((TO_DATE( '#{@start_date}', 'YYYY-MM-DD' ), TO_DATE( '#{@end_date}', 'YYYY-MM-DD' ))
         OVERLAPS (contracts.start_date, contracts.start_date+contracts.rental_days)) AND
     (tariffs.start_date = (SELECT max(start_date) as date FROM tariffs
-    WHERE (tariffs.start_date <= start_date)));"
+    WHERE ((tariffs.start_date <= contracts.start_date) AND
+     tariffs.box_type_id=box_types.id)));"
     result = ActiveRecord::Base.connection.execute(sql)
     
     date_range = @start_date..@end_date
@@ -120,12 +122,13 @@ class ReportsController < ApplicationController
     @result = date_months.inject({}) {|memo,d| memo[(d.strftime '%m.%y').to_s] = { number: 0, income: 0}; memo}
     result.each do |value|
       start_date =  value["start_date"].to_s.to_date
-      date_array = (start_date..(start_date+value["rental_days"].to_i.days)).to_a
+      date_array = (start_date..(start_date+value["days"].to_i.days)).to_a
       price = value["price"].to_f
+      value = @result[(start_date.strftime '%m.%y').to_s]
+      value[:number]+=1 unless value.nil?
       date_array.each do |date|
         value = @result[(date.strftime '%m.%y').to_s]
         next if value.nil?
-        value[:number]+=1
         value[:income]+=price
       end
     end

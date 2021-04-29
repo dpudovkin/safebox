@@ -25,7 +25,10 @@ ActiveAdmin.register_page "Dashboard" do
       end
       column do
         panel "Charts and graphics" do
-
+          ol
+          li link_to "Clients banks in payment details", charts_banks_path
+          li link_to "Clients age", charts_clients_age_path
+          li link_to "Tariff changes",charts_tariffs_path
         end
       end
     end
@@ -43,7 +46,8 @@ ActiveAdmin.register_page "Dashboard" do
         column do
           panel "Actual tarrif" do
             ul do
-              Tariff.last(10).map do |tariff|
+              Tariff.actual(Date.today).map do |id|
+                tariff= Tariff.find(id)
                 li link_to tariff.full_name, admin_tariff_path(tariff)
               end
             end

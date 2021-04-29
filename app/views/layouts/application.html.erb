@@ -8,9 +8,20 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-  <h1>
-    SafeBox Admin Panel
-  </h1>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="row">
+      <div class="col-12">
+  <h2>
+    Safebox: reports&charts panel
+  </h2>
+      </div>
+      <div class="col-2">
+    <%= link_to "Dashboard",
+                admin_root_path
+    %>
+      </div>
+    </div>
+  </nav>
 
   <body>
   <%= yield %>

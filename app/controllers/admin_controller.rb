@@ -25,4 +25,8 @@ class AdminController < ApplicationController
   def update_tariff
     Tariff.update
   end
+
+  def add_tariff
+    Tariff.add_new
+  end
 end

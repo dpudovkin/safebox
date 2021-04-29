@@ -1,0 +1,14 @@
+<%i=0 %>
+<% @result.each do |value| %>
+  <%i+=1 %>
+  <% if i.odd? %>
+  <div class="row" style="margin: 8px;">
+  <% end %>
+  <div class="col-6">
+<h3> <%=value[:name] %></h3>
+<%= line_chart value[:data], xtitle: "Date", ytitle: "Price", curve: true%>
+    </div>
+  <% if i.even? %>
+    </div>
+  <% end %>
+<%end %>

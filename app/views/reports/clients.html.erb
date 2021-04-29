@@ -1,12 +1,19 @@
+
+<div class="row" style="margin: 8px;">
+  <div class="col-2">
+    <div class="form-group">
 <%= form_with url: reports_clients_path, local: true ,:method => "get", id: 'generate report' do |form|%>
   <%= label_tag('On the date:') %>
   <%= form.date_field :end_date, value: @end_date %>
   <br/>
-  <%= submit_tag("Generate report") %>
+  <%= submit_tag "Generate report",class: "btn btn-primary", style: "margin: 8px;" %>
 <% end %>
+    </div>
 
+  </div>
 <% unless @result.nil? or @result.length.zero? %>
-  <table>
+    <div class="col-10">
+  <table class ="table-striped">
     <tr>
       <th>Line number</th>
       <th>Client name</th>
@@ -27,7 +34,7 @@
     </tr>
       <%end %>
   </table>
-
+    </div>
 <%end %>
-
+</div>
 

@@ -18,9 +18,9 @@ class Contract < ApplicationRecord
   end
 
   def self.generate
-    Contract.delete_all
-    TerminationsOfContract.delete_all
-    numbers = 60000
+    # Contract.delete_all
+    # TerminationsOfContract.delete_all
+    numbers = 20000
     client_ids = Client.all.map(&:id)
     box_ids =  Box.all.map(&:id)
     numbers.times do |index|
@@ -76,7 +76,7 @@ class Contract < ApplicationRecord
     contracts.each do |contract|
       range.append(contract.start_date..(contract.start_date + contract.rental_days.days))
     end
-    dates = (Date.new(2015, 1, 1)..Date.new(2025, 1, 1)).to_a
+    dates = (Date.new(Random.rand(2015..2019), Random.rand(1..12), 1)..Date.new(2025, 1, 1)).to_a
     res = dates.select do |date|
       range.all? do |range|
         !range.cover?(date)
@@ -95,21 +95,6 @@ class Contract < ApplicationRecord
       end  
     end
     return res
-    #     buffer = []
-    #     dates.each do |date|
-    #       free = range.all? do |range|
-    #         !range.cover?(date)
-    #       end
-    #       if (free)
-    #         buffer.append(date)
-    #       else
-    #         if buffer.length>21
-    #           return buffer
-    #         else
-    #           buffer.clear
-    #         end
-    #       end
-    #     end
   end
 
   def self.random_date_in_year(year)

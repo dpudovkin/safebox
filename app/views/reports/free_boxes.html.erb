@@ -1,5 +1,7 @@
 
-
+<div class="row" style="margin: 8px;">
+  <div class="col-3">
+    <div class="form-group">
 <%= form_with url: reports_free_boxes_path, local: true ,:method => "get", id: 'generate report from' do |form|%>
   <%= label_tag('Box type:') %>
   <%= form.select :type, BoxType.all.collect { |type| [type.full_name.to_s, type.id] }, selected: @type_id
@@ -11,11 +13,14 @@
   <%= label_tag('End date:') %>
   <%= form.date_field :end_date,placeholder: "End date of reservation", value: @end_date %>
   <br/>
-  <%= submit_tag("Generate report") %>
+  <%= submit_tag "Generate report",class: "btn btn-primary", style: "margin: 8px;" %>
 <% end %>
+    </div>
+  </div>
 
 <% unless @result.nil? %>
-  <table>
+    <div class="col-9">
+  <table  class ="table-striped">
     <tr>
       <th>Price per day</th>
       <th>Rental days</th>
@@ -28,7 +33,7 @@
     </tr>
   </table>
   <br/>
-<table>
+<table  class ="table-striped">
   <tr>
     <th>Line number</th>
   <th>Box number</th>
@@ -55,4 +60,6 @@
    </tr>
   <% end %>
 </table>
+    </div>
 <% end %>
+</div>

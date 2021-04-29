@@ -1,9 +1,5 @@
-<%#= form_with url: reports_customer_billing_path, local: true ,:method => "get", id: 'generate report' do |form|%>
-<!--  <br/>-->
-  <%#= submit_tag("Generate report") %>
-<%# end %>
-
-<table>
+<div class="row" style="margin: 8px;">
+<table class ="table-striped">
   <tr>
     <th>Line number</th>
     <th>Client</th>
@@ -27,4 +23,5 @@
     </tr>
   <%end %>
 </table>
+</div>
 

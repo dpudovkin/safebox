@@ -56,7 +56,8 @@ class Box < ApplicationRecord
   end
 
   def full_name
-    "Number:#{number} Section:#{section.full_name} Type:#{box_type.full_name}"
+    # "Number:#{number} Section:#{section.full_name} Type:#{box_type.full_name}"
+    "Number:#{number}"
   end
 
 
